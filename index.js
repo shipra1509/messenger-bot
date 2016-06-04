@@ -41,6 +41,9 @@ app.post('/webhook/', function (req, res) {
                 sendGenericMessage(sender)
                 continue
             }
+            else
+                sendAnythingMessage(sender)
+            continue
             sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
         }
     }
@@ -119,3 +122,31 @@ function sendGenericMessage(sender) {
     })
 }
 
+function sendAnythingMessage(sender) {
+    messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Oops! I didn't catch that. For things I can help you with, type 'help'.",
+                }, 
+            }
+        }
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token:token},
+        method: 'POST',
+        json: {
+            recipient: {id:sender},
+            message: messageData,
+        }
+    }, function(error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+}
