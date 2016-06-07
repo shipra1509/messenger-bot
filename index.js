@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 
 // Index route
 app.get('/', function (req, res) {
-    res.send('Hello world, I am a chat bot')
+    res.send('Hello world, I am Flatsharebot')
 })
 
 // for Facebook verification
@@ -74,8 +74,11 @@ function sendTextMessage(sender, text) {
 }
 
 function parseMessage(sender, text) {
-    console.log(‘render-bot received message: ‘ + text)
-    console.log(‘sender: ‘ + sender)if (message.indexOf(“FlatshareBot!’)
+    console.log('render-bot received message: ' + text)
+    if (message.indexOf("hi") != -1) 
+        console.log('sender: ' + sender)
+    {
+        sendTextMessage(sender, 'Hi and welcome to FatCatBot!')
     }
 }
 
