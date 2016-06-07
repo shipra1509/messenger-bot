@@ -33,20 +33,19 @@ app.listen(app.get('port'), function() {
 app.post('/webhook/', function (req, res) {
     messaging_events = req.body.entry[0].messaging
     for (i = 0; i < messaging_events.length; i++) {
+
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
+
         if (event.message && event.message.text) {
             text = event.message.text
+
             if (text === 'Generic') {
                 sendGenericMessage(sender)
                 continue
             }
-            else{
-                sendAnythingMessage(sender)
-                continue
-            }
-/*            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
-*/        }
+            parseMessage(sender, text)
+        }
     }
     res.sendStatus(200)
 })
@@ -72,6 +71,12 @@ function sendTextMessage(sender, text) {
             console.log('Error: ', response.body.error)
         }
     })
+}
+
+function parseMessage(sender, text) {
+    console.log(‘render-bot received message: ‘ + text)
+    console.log(‘sender: ‘ + sender)if (message.indexOf(“FlatshareBot!’)
+    }
 }
 
 function sendGenericMessage(sender) {
@@ -103,35 +108,6 @@ function sendGenericMessage(sender) {
                         "payload": "Payload for second element in a generic bubble",
                     }],
                 }]
-            }
-        }
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token:token},
-        method: 'POST',
-        json: {
-            recipient: {id:sender},
-            message: messageData,
-        }
-    }, function(error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
-
-function sendAnythingMessage(sender) {
-    messageData = {
-        "attachment": {
-            "type": "template",
-            "payload": {
-                "template_type": "generic",
-                "elements": [{
-                    "title": "Oops! I didn't catch that. For things I can help you with, type 'help'.",
-                }, 
             }
         }
     }
